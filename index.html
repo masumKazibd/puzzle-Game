@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Puzzle Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            font-family: 'Century Gothic';
+        }
+        .main{
+            width: 600px;
+            height: 600px;
+            margin: 20px auto;
+        }
+        .sq{
+            padding: 2px;
+            /* border-color: 5px gray; */
+            background-color: azure;
+        }
+        .dragging{
+            background-color:#ff0000;
+        }
+    </style>
+        <script src="Scripts/jquery.js"></script>
+
+</head>
+<body>
+    
+    <div class="main" id="board">
+        <div class="alert alert-success d-flex mt-2 col justify-content-center fs-1 ">Puzzle Game</div>
+        <div class="row">
+            <div class="sq col-4 px-2" id="s0" draggable="true" data-index="0">
+                <img src="./Images/Mk/row-2-column-1.png" alt="">
+            </div>
+                <!-- index 7 -->
+            <div class="sq col-4 px-2" id="s1" draggable="true" data-index="1">
+                <img src="./Images/Mk/row-3-column-2.png" alt="">
+            </div>
+                <!-- index 5 -->
+            <div class="sq col-4 px-2" id="s2" data-index="2">
+                <!-- <img src="/Images/Mk/row-1-column-3.png" alt=""> -->
+            </div>
+                <!-- index 2 -->
+        </div>
+        <div class="row">
+            <div class="sq col-4 px-2" id="s3" draggable="true" data-index="3">
+                <img src="./Images/Mk/row-3-column-3.png" alt="">
+            </div>
+                <!-- index 0 -->
+            <div class="sq col-4 px-2" id="s4" draggable="true" data-index="4">
+                <img src="./Images/Mk/row-3-column-1.png" alt="">
+            </div>
+                <!-- index 6 -->
+            <div class="sq col-4 px-2" id="s5" draggable="true" data-index="5">
+                <img src="./Images/Mk/row-1-column-2.png" alt="">
+            </div>
+                <!-- index 8 -->
+        </div>
+        <div class="row">
+            <div class="sq col-4 px-2" id="s6" draggable="true" data-index="6">
+                <img src="./Images/Mk/row-2-column-2.png" alt="">
+            </div>
+                <!-- index 4 -->
+            <div class="sq col-4 px-2" id="s7" draggable="true" data-index="7">
+                <img src="./Images/Mk/row-1-column-1.png" alt="">
+            </div>
+                <!-- index 1 -->
+            <div class="sq col-4 px-2" id="s8" draggable="true" data-index="8">
+                <img src="./Images/Mk/row-2-column-3.png" alt="">
+            </div>
+                <!-- index 3 -->
+        </div>
+        <div class="d-flex justify-content-center mt-2">
+            <button class="btn btn-success" id="reload">
+                <i class="fas fa-redo"></i>  Reload
+        </div>
+    </div>
+
+    <script>
+        $(() => {
+            $("#board").on("dragstart", (evt) => {
+                var tile = $(evt.originalEvent.target);
+                var index = tile.parent().data("index");
+                evt.originalEvent.dataTransfer.setData("text/plain", index);
+                tile.addClass("dragging");
+            });
+            $("#board").on("dragend", (evt) => {
+                var tile = $(evt.originalEvent.target);
+                tile.removeClass("dragging");
+            });
+            $("#board").on("dragenter", (evt) => {
+                evt.preventDefault();
+            });
+            $("#board").on("dragover", (evt) => {
+                evt.preventDefault();
+            });
+            $("#board").on("drop", (evt) => {
+                evt.preventDefault();
+                var sq = $(evt.originalEvent.target);
+                if (sq.hasClass("sq")) {
+                    if (sq.children().length == 0) {
+                        var from = evt.originalEvent.dataTransfer.getData("text/plain");
+                    };
+                    var to = sq.data("index");
+                    console.log(from);
+                    console.log(to);
+
+                    if (from == 0) {
+                        if (to == 1 || to == 3) {
+                            swaptile(from, to);
+                        }
+                    }
+
+                    if (from == 1) {
+                        if (to == 0 || to == 2 || to == 4 ) {
+                            swaptile(from, to);
+                        }
+                    }
+
+                    if (from == 2) {
+                        if (to == 1 || to == 5 ) {
+                            swaptile(from, to);
+                        }
+                    }
+
+                    if (from == 3) {
+                        if (to == 0 || to == 4 || to == 6) {
+                            swaptile(from, to);
+                        }
+                    }
+                    
+                    if (from == 4) {
+                        if (to == 1 ||  to == 3 ||  to == 5 ||  to == 7 ) {
+                            swaptile(from, to);
+                        }
+                    }
+
+                    if (from == 5) {
+                        if ( to == 2 || to == 4 || to == 8 ) {
+                            swaptile(from, to);
+                        }
+                    }
+
+                    if (from == 6) {
+                        if (to == 3 || to == 7) {
+                            swaptile(from, to);
+                        }
+                    }
+
+                    if (from == 7) {
+                        if (to == 4 || to == 6 || to == 8 ) {
+                            swaptile(from, to);
+                        }
+                    }
+
+                    else {
+                        if (to == 5 ||to == 7) {
+                            swaptile(from, to);
+                        }
+                    }
+
+                    // if (from == 0) {
+                    //     if (to == 1 || to == 2 || to == 3 || to == 4 || to == 5 || to == 6 || to == 7 || to == 8 ) {
+                    //         swaptile(from, to);
+                    //     }
+                    // }
+
+                    // if (from == 1) {
+                    //     if (to == 0 || to == 2 || to == 3 || to == 4 || to == 5 || to == 6 || to == 7 || to == 8 ) {
+                    //         swaptile(from, to);
+                    //     }
+                    // }
+
+                    // if (from == 2) {
+                    //     if (to == 1 || to == 0 || to == 3 || to == 4 || to == 5 || to == 6 || to == 7 || to == 8 ) {
+                    //         swaptile(from, to);
+                    //     }
+                    // }
+
+                    // if (from == 3) {
+                    //     if (to == 1 || to == 2 || to == 0 || to == 4 || to == 5 || to == 6 || to == 7 || to == 8 ) {
+                    //         swaptile(from, to);
+                    //     }
+                    // }
+                    
+                    // if (from == 4) {
+                    //     if (to == 1 || to == 2 || to == 3 || to == 0 || to == 5 || to == 6 || to == 7 || to == 8 ) {
+                    //         swaptile(from, to);
+                    //     }
+                    // }
+
+                    // if (from == 5) {
+                    //     if (to == 1 || to == 2 || to == 3 || to == 4 || to == 0 || to == 6 || to == 7 || to == 8 ) {
+                    //         swaptile(from, to);
+                    //     }
+                    // }
+
+                    // if (from == 6) {
+                    //     if (to == 1 || to == 2 || to == 3 || to == 4 || to == 5 || to == 0 || to == 7 || to == 8 ) {
+                    //         swaptile(from, to);
+                    //     }
+                    // }
+
+                    // if (from == 7) {
+                    //     if (to == 1 || to == 2 || to == 3 || to == 4 || to == 5 || to == 6 || to == 0 || to == 8 ) {
+                    //         swaptile(from, to);
+                    //     }
+                    // }
+
+                    // else {
+                    //     if (to == 1 || to == 2 || to == 3 || to == 4 || to == 5 || to == 6 || to == 7  || to == 8) {
+                    //         swaptile(from, to);
+                    //     }
+                    // }
+                }
+            });
+            function swaptile(from, to) {
+                $(`#s${from}`).children().appendTo($(`#s${to}`));
+            }
+            $('#reload').click(() => {
+                window.location.reload();
+            });
+        })
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+</body>
+</html>
